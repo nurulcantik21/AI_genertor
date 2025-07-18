@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Validasi Kompleks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f9f9f9;
+    }
+    .form-container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .strength {
+      height: 10px;
+      width: 100%;
+      background: #ddd;
+      margin-top: 5px;
+      border-radius: 4px;
+    }
+    .strength-bar {
+      height: 100%;
+      transition: width 0.3s;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 10px;
+      width: 100%;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Registrasi Pengguna</h2>
+    <form id="regForm">
+      <label>Email
+        <input type="email" id="email" required>
+        <div class="error" id="emailError"></div>
+      </label>
+
+      <label>Nomor Telepon (+62...)
+        <input type="tel" id="phone" pattern="^\+62\d{9,13}$" required>
+        <div class="error" id="phoneError"></div>
+      </label>
+
+      <label>Password
+        <input type="password" id="password" required>
+        <div class="strength"><div class="strength-bar" id="strengthBar"></div></div>
+      </label>
+
+      <label>Role
+        <select id="role" required>
+          <option value="">-- Pilih Role --</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </label>
+
+      <div id="adminFields" style="display:none;">
+        <label>Kode Admin
+          <input type="text" id="adminCode">
+        </label>
+      </div>
+
+      <button type="submit">Daftar</button>
+    </form>
+  </div>
+
+  <script>
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const password = document.getElementById('password');
+    const strengthBar = document.getElementById('strengthBar');
+    const role = document.getElementById('role');
+    const adminFields = document.getElementById('adminFields');
+    const form = document.getElementById('regForm');
+
+    email.addEventListener('input', () => {
+      const valid = email.validity.valid;
+      document.getElementById('emailError').textContent = valid ? "" : "Email tidak valid!";
+    });
+
+    phone.addEventListener('input', () => {
+      const valid = phone.validity.valid;
+      document.getElementById('phoneError').textContent = valid ? "" : "Format harus +62xxxxxxxxx";
+    });
+
+    password.addEventListener('input', () => {
+      const value = password.value;
+      let strength = 0;
+      if (value.length > 5) strength += 20;
+      if (/[A-Z]/.test(value)) strength += 20;
+      if (/[0-9]/.test(value)) strength += 20;
+      if (/[\W]/.test(value)) strength += 20;
+      if (value.length > 8) strength += 20;
+      strengthBar.style.width = strength + "%";
+      strengthBar.style.background = strength < 60 ? 'red' : (strength < 80 ? 'orange' : 'green');
+    });
+
+    role.addEventListener('change', () => {
+      adminFields.style.display = role.value === 'admin' ? 'block' : 'none';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert("Form berhasil divalidasi!");
+    });
+  </script>
+</body>
+</html>
