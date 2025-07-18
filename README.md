@@ -1,0 +1,2 @@
+# AI_genertor
+terserah
